@@ -1,0 +1,204 @@
+{
+	"Slash Command": {
+		"prefix": "new.command",
+		"scope":"typescript",
+		"body": [
+			"new Command({",
+			"    name: \"$1\",",
+			"    description: \"$2\",",
+			"    dmPermission: false,",
+			"    type: ApplicationCommandType.ChatInput,",
+			"    async run(interaction){",
+			"        $3",
+			"    }",
+			"});"
+		],
+		"description": "Create a new Slash Command"
+	},
+	"Slash Command with options": {
+		"prefix": "new.command.options",
+		"scope":"typescript",
+		"body": [
+			"new Command({",
+			"    name: \"$1\",",
+			"    description: \"$2\",",
+			"    dmPermission: false,",
+			"    type: ApplicationCommandType.ChatInput,",
+			"    options: [",
+			"        {",
+			"            name: \"$3\",",
+			"            description: \"$4\",",
+			"            type: ApplicationCommandOptionType.$5",
+			"        }",
+			"    ],",
+			"    async run(interaction){",
+			"        const { options } = interaction;",
+			"        ",
+			"    }",
+			"});"
+		],
+		"description": "Create a new Slash Command with options"
+	},
+	"Slash Command option": {
+		"prefix": "new.option",
+		"scope":"typescript",
+		"body": [
+			"{",
+			"    name: \"$1\",",
+			"    description: \"$2\",",
+			"    type: ApplicationCommandOptionType.$3,",
+			"}",
+		],
+		"description": "Create a new Slash Command with options"
+	},
+	"User Context Command": {
+		"prefix": "new.command.user",
+		"scope":"typescript",
+		"body": [
+			"new Command({",
+			"    name: \"$1\",",
+			"    dmPermission,",
+			"    type: ApplicationCommandType.User,",
+			"    async run(interaction){",
+			"        ",
+			"    }",
+			"});"
+		],
+		"description": "Create a new User Context Command"
+	},
+	"Message Context Command": {
+		"prefix": "new.command.message",
+		"scope":"typescript",
+		"body": [
+			"new Command({",
+			"    name: \"$1\",",
+			"    dmPermission,",
+			"    type: ApplicationCommandType.Message,",
+			"    async run(interaction){",
+			"        ",
+			"    }",
+			"});"
+		],
+		"description": "Create a new Message Context Command"
+	},
+	"Component": {
+		"prefix": "new.component",
+		"scope":"typescript",
+		"body": [
+			"new Component({",
+			"    customId: \"example/component/button\",",
+			"    type: ComponentType.$1, cache: \"cached\",",
+			"    async run(interaction) {",
+			"        ",
+			"    },",
+			"});"
+		],
+		"description": "Create a new component"
+	},
+	"Component Params": {
+		"prefix": "new.component.params",
+		"scope":"typescript",
+		"body": [
+			"new Component({",
+			"    customId: \"users/:userId/:action\",",
+			"    type: ComponentType.ActionRow, cache: \"cached\",",
+			"    async run(interaction, { userId, action }) {",
+			"        ",
+			"    },",
+			"});"
+		],
+		"description": "Create a new component with params"
+	},
+	"Modal": {
+		"prefix": "new.modal",
+		"scope":"typescript",
+		"body": [
+			"new Modal({",
+			"    customId: \"example/modal\",",
+			"    cache: \"cached\", isFromMessage: true,",
+			"    async run(interaction) {",
+			"        ",
+			"    },",
+			"});"
+		],
+		"description": "Create a new modal"
+	},
+	"Event": {
+		"prefix": "new.event",
+		"scope":"typescript",
+		"body": [
+			"import { Event } from \"#base\";",
+			"",
+			"new Event({",
+			"    name: \"$1\",",
+			"    event: \"$2\",",
+			"    $3",
+			"});"
+		],
+		"description": "Create a new event"
+	},
+	"Create Row With Buttons": {
+		"prefix": "createrow.buttons",
+		"scope":"typescript",
+		"body": [
+			"createRow(",
+			"    new ButtonBuilder({",
+			"        customId: \"$1\"," ,
+			"        label: \"$2\", ",
+			"        style: ButtonStyle.Success",
+			"    })",
+			");"
+		],
+		"description": "Create a new row with buttons"
+	},
+	"Create Row With String Select": {
+		"prefix": "createrow.stringselect",
+		"scope":"typescript",
+		"body": [
+			"createRow(",
+			"    new StringSelectMenuBuilder({",
+			"        customId: \"$1\",",
+			"        placeholder: \"$2\",",
+			"        options: [",
+			"            { label: \"\", value: \"\", description: \"\" },",
+			"            { label: \"\", value: \"\", description: \"\" },",
+			"            { label: \"\", value: \"\", description: \"\" }",
+			"        ]",
+			"    })",
+			");"
+		],
+		"description": "Create a new row with string select"
+	},
+	"Extract slash interaction props": {
+		"prefix": "const.interaction.slash",
+		"scope":"typescript",
+		"body": [
+			"const { options, member, guild } = interaction;"
+		],
+		"description": "Extract slash interaction properties"
+	},
+	"Extract modal interaction props": {
+		"prefix": "const.interaction.modal",
+		"scope":"typescript",
+		"body": [
+			"const { fields, member, guild } = interaction;"
+		],
+		"description": "Extract modal interaction properties"
+	},
+	"Extract button interaction props": {
+		"prefix": "const.interaction.button",
+		"scope":"typescript",
+		"body": [
+			"const { member, guild } = interaction;"
+		],
+		"description": "Extract button interaction properties"
+	},
+	"Extract select interaction props": {
+		"prefix": "const.interaction.select",
+		"scope":"typescript",
+		"body": [
+			"const { values, member, guild } = interaction;"
+		],
+		"description": "Extract select interaction properties"
+	}
+}

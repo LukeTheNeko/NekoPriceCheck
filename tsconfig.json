@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"strict": true,
+		
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"baseUrl": "./src",
+		"paths": {
+			"#base": ["./discord/base/index.ts"],
+			"#settings": ["./settings/index.ts"],
+			"#database": ["./database/index.ts"],
+			"#functions": ["./functions/index.ts"],
+			"#tools": ["./tools/index.ts"],
+			"#classes": ["./classes/index.ts"],
+			"#menus": ["./menus/index.ts"],
+			"#tasks": ["./tasks/index.ts"],
+		},
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}
