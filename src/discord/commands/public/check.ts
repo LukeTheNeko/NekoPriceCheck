@@ -20,8 +20,8 @@ new Command({
             description: "currency type.",
             type: ApplicationCommandOptionType.String,
             choices: [
-                { name: 'USD', value: 'USD' },
-                { name: 'BRL', value: 'BRL' },
+                { name: 'USD', value: '1' },
+                { name: 'BRL', value: '7' },
             ],
             required: true,
         }
@@ -29,7 +29,7 @@ new Command({
     async run(interaction) {
         const { options } = interaction;
 
-        interaction.deferReply({ ephemeral: false })
+        await interaction.deferReply({ ephemeral: false })
 
         const skin: string = options.getString("skin")!;
         const currency: string = options.getString("currency")!;
@@ -39,7 +39,7 @@ new Command({
             return;
         }
 
-        const itemData = await getItemData(skin, 7, currency);
+        const itemData = await getSteamData(skin, currency);
 
         if (!itemData) {
             await interaction.reply("Erro ao obter os dados da pele.");
@@ -54,10 +54,8 @@ new Command({
                 description: brBuilder(
                     ` **Skin:** ${skin}`,
                     ` **Type:** ${item.type}`,
-                    ` **Gun Type:** ${item.gun_type}`,
-                    ` **Exterior:** ${item.exterior}`,
                     ` **Rarity:** ${item.rarity}`,
-                    ` **Average Price:** ${itemData.average_price} ${currency}`,
+                    ` **Price:** ${itemData.lowest_price}`,
                 ),
                 thumbnail: `https://community.akamai.steamstatic.com/economy/image/${item.icon_url}`
             });
@@ -67,10 +65,10 @@ new Command({
     }
 });
 
-async function getItemData(name: string, time: number, currency: string) {
+async function getSteamData(name: string, currency: string) {
     try {
         const response = await axios.get(
-            `https://csgobackpack.net/api/GetItemPrice/?currency=${currency}&id=${name}&time=${time}`
+            `https://steamcommunity.com/market/priceoverview/?appid=730&currency=${currency}&market_hash_name=${name}`
         );
         return response.data;
     } catch (err) {
