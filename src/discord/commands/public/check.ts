@@ -1,11 +1,12 @@
-import axios from "axios";
 import { Command } from "#base";
+import { getItemByName, getSteamData, icon } from "#functions";
 import { brBuilder, createEmbed } from "@magicyan/discord";
+import axios from "axios";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js";
 
 new Command({
     name: "check",
-    description: "Check a item Price.",
+    description: "🪙 Check a Skin Price.",
     dmPermission: true,
     type: ApplicationCommandType.ChatInput,
     options: [
@@ -13,7 +14,8 @@ new Command({
             name: "skin",
             description: "skin name.",
             type: ApplicationCommandOptionType.String,
-            required: true,
+            autocomplete: true,
+            required,
         },
         {
             name: "currency",
@@ -22,76 +24,75 @@ new Command({
             choices: [
                 { name: 'USD', value: '1' },
                 { name: 'BRL', value: '7' },
+                { name: 'EUR', value: '3' },
+                { name: 'RUB', value: '5' },
+                { name: 'CAD', value: '20' },
+                { name: 'AUD', value: '21' },
+                { name: 'GBP', value: '2' },
+                { name: 'CHF', value: '4' },
             ],
             required: true,
         }
     ],
+    async autocomplete(interaction) {
+        const focused = interaction.options.getFocused(true);
+
+        if (focused.name === "skin") {
+            try {
+                const response = await axios.get(`https://cs2-api.vercel.app/api/en/market-items.json`);
+                const itemsList: { [key: string]: { market_hash_name: string } } = response.data;
+
+                const filteredSkins = Object.values(itemsList)
+                    .filter((item: { market_hash_name: string }) => {
+                        const { market_hash_name } = item;
+                        return focused.value && market_hash_name && market_hash_name.toLowerCase().includes(focused.value.toLowerCase());
+                    })
+                    .slice(0, 25)
+                    .map((item: { market_hash_name: string }) => ({ name: item.market_hash_name, value: item.market_hash_name }));
+
+                await interaction.respond(filteredSkins);
+            } catch (err) {
+                console.log("Error fetching skin names for autocomplete:", err);
+            }
+        }
+    },
+
     async run(interaction) {
         const { options } = interaction;
 
-        await interaction.deferReply({ ephemeral: false })
+        await interaction.deferReply({})
 
-        const skin: string = options.getString("skin")!;
-        const currency: string = options.getString("currency")!;
+        const skin = options.getString("skin")!;
+        const currency = options.getString("currency")!;
 
-        if (!skin || !currency) {
-            await interaction.reply("Please provide both skin name and currency type.");
-            return;
-        }
+        const encodedSkin = encodeURIComponent(skin);
+        const itemData = await getSteamData(encodedSkin, currency);
 
-        const itemData = await getSteamData(skin, currency);
-
-        if (!itemData) {
-            await interaction.reply("Erro ao obter os dados da pele.");
-            return;
-        }
-
-        const item = await getItemColor(skin);
-        if (item) {
+        const itemStatus = await getItemByName(skin);
+        
+        if (itemStatus) {
+            const firstItem = itemStatus[0];
+        
             const embed = createEmbed({
-                color: `#${item.rarity_color}`,
-                title: "Skin Prices",
+                color: firstItem.rarity?.color ? parseInt(firstItem.rarity.color.replace('#', ''), 16) : 0x999999,
+                title: `${icon("view")} CS2 Price Checker`,
+                url: `https://steamcommunity.com/market/listings/730/${encodedSkin}`,
                 description: brBuilder(
-                    ` **Skin:** ${skin}`,
-                    ` **Type:** ${item.type}`,
-                    ` **Rarity:** ${item.rarity}`,
-                    ` **Price:** ${itemData.lowest_price}`,
+                    `🔫 **Skin:** ${skin}`,
+                    `📦 **Type:** ${firstItem.category?.name || 'undefined'}`,
+                    `💎 **Rarity:** ${firstItem.rarity?.name }`,
+                    `🧊 **Collection:** ${firstItem.collections?.[0].name || 'undefined'}`,
                 ),
-                thumbnail: `https://community.akamai.steamstatic.com/economy/image/${item.icon_url}`
+                fields: [
+                    { name: `${icon("steam")}  Steam`, value: `[${itemData?.lowest_price || 'undefined'}](https://steamcommunity.com/market/listings/730/${encodedSkin})`, inline: true },
+                ],
+                timestamp: new Date(),
+                thumbnail: `${firstItem.image}`,
             });
-
-            await interaction.editReply({ embeds: [embed] });
+            
+        await interaction.editReply({ embeds: [embed] });
+        } else {
+            await interaction.editReply({ content: "error" });
         }
     }
 });
-
-async function getSteamData(name: string, currency: string) {
-    try {
-        const response = await axios.get(
-            `https://steamcommunity.com/market/priceoverview/?appid=730&currency=${currency}&market_hash_name=${name}`
-        );
-        return response.data;
-    } catch (err) {
-        console.log(err);
-        return null;
-    }
-}
-
-async function getItemColor(name: string) {
-    try {
-        const response = await axios.get(
-            `https://csgobackpack.net/api/GetItemsList/v2/`
-        );
-        const itemsList = response.data.items_list;
-        const item = itemsList[name];
-        if (item) {
-            return item;
-        } else {
-            console.log("Item not found.");
-            return null;
-        }
-    } catch (err) {
-        console.log(err);
-        return null;
-    }
-}

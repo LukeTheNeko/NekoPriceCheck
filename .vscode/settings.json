@@ -5,23 +5,20 @@
     "modals": "Content",
     "menus": "layout",
     "forms": "custom",
-
     "experimental": "Test",
     "deprecated": "Archive",
     "development": "Test",
     "production": "Dist",
-    
     "staff": "Admin",
     "protection": "Guard",
-    
     "presets": "Template",
     "default": "Project",
-    
     "playground": "typescript",
     "firestore": "Firebase",
     "mongodb": "Database",
     "mysql": "Database",
-    "quickdb": "Json"
+    "quickdb": "Json",
+    "responders": "Meta"
   },
   "material-icon-theme.files.associations": {
     "firebase.development.json": "Firebase",
@@ -35,9 +32,9 @@
   "material-icon-theme.folders.theme": "specific",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    ".env": ".env.development, .env.production, .env.test, .env.dev, .env.example",
-    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, tsconfig.json, .eslintrc.json, .gitignore, .discloudignore, LICENSE.txt",
-    "firebase.json": "firebase.json, firebase.development.json, firebase.dev.json, firebase.example.json"
+    ".env": ".env.development, .env.production, .env.test, .env.example",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, tsconfig.json, .eslintrc.json, .gitignore, .discloudignore, squarecloud.app, discloud.config, LICENSE.txt",
+    "firebase.json": "firebase.json, firebase.development.json, firebase.example.json"
   },
   "typescript.suggest.autoImports": true,
   "window.title": "${rootName}${separator}${appName}",
