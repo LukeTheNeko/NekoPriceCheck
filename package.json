@@ -27,7 +27,7 @@
     "@magicyan/discord": "^1.0.29",
     "@types/steam-totp": "^2.1.2",
     "@types/steam-user": "^5.0.0",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "chalk": "^5.3.0",
     "consola": "^3.2.3",
     "discord.js": "^14.15.1",
